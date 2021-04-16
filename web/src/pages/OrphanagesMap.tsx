@@ -13,7 +13,7 @@ interface Orphanage {
     id: number;
     latitude: number;
     longitude: number;
-    nome: string;
+    name: string;
 }
 
 function OrphanagesMap () {
@@ -54,16 +54,16 @@ function OrphanagesMap () {
                     key={orphanage.id}
                     icon = {mapIcon}
                     position={[orphanage.latitude,orphanage.longitude]}
-                >
+                    >
 
-                    <Popup closeButton={false} minWidth={240} maxWidth={240} className="map-popup">
-                        {orphanage.nome}
-                        <Link to={`/orphanages/${orphanage.id}`}>
-                            <FiArrowRight size={20} color="#FFF"/>
-                        </Link>
-                    </Popup>
+                        <Popup closeButton={false} minWidth={240} maxWidth={240} className="map-popup">
+                            {orphanage.name}
+                            <Link to={`/orphanages/${orphanage.id}`}>
+                                <FiArrowRight size={20} color="#FFF"/>
+                            </Link>
+                        </Popup>
 
-                </Marker>
+                    </Marker>
                    )
                })}
 
