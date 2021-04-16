@@ -1,14 +1,30 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FiPlus, FiArrowRight } from 'react-icons/fi';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 
 import mapMarkerImg from '../images/map-marker.svg';
 import mapIcon from '../utils/mapIcon';
+import api from '../services/api';
 
 import '../styles/pages/orphanages-map.css';
 
+interface Orphanage {
+    id: number;
+    latitude: number;
+    longitude: number;
+    nome: string;
+}
+
 function OrphanagesMap () {
+
+    const [orphanages, setOrphanages] = useState<Orphanage[]>([]);
+    
+    useEffect(() => {
+        api.get('orphanages').then(response => {
+            setOrphanages(response.data);
+        })
+    }, []);
     return (
         <div id="page-map">
             <aside>
@@ -32,19 +48,24 @@ function OrphanagesMap () {
             >
                 <TileLayer url={`https://api.mapbox.com/styles/v1/mapbox/dark-v10/tiles/256/{z}/{x}/{y}@2x?access_token=${process.env.REACT_APP_MAPBOX_TOKEN}`}/>
 
-                <Marker
+               {orphanages.map(orphanage =>{
+                   return (
+                    <Marker
+                    key={orphanage.id}
                     icon = {mapIcon}
-                    position={[38.7913255,-9.3340266]}
+                    position={[orphanage.latitude,orphanage.longitude]}
                 >
 
                     <Popup closeButton={false} minWidth={240} maxWidth={240} className="map-popup">
-                        Lar das meninas
-                        <Link to="/orphanages/1">
+                        {orphanage.nome}
+                        <Link to={`/orphanages/${orphanage.id}`}>
                             <FiArrowRight size={20} color="#FFF"/>
                         </Link>
                     </Popup>
 
                 </Marker>
+                   )
+               })}
 
             </MapContainer>
 
